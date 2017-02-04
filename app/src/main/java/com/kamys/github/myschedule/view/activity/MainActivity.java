@@ -31,6 +31,9 @@ import org.w3c.dom.Document;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Главное MainActivity.
  */
@@ -41,24 +44,29 @@ public class MainActivity extends AppCompatActivity {
     /**
      * DrawerLayout который находится на  MainActivity.
      */
-    private DrawerLayout drawerLayout;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
     /**
      * Кнопка обновления.
      */
-    private FloatingActionButton fab;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
     /**
      * Toolbar который находится на  MainActivity.
      */
-    private Toolbar toolbar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     /**
      * TabLayout который находится на  MainActivity.
      */
-    private TabLayout tabLayout;
+    @BindView(R.id.tabs)
+    TabLayout tabLayout;
     /**
      * ViewPager который находится на  MainActivity.
      * для отображения DayFragment.
      */
-    private ViewPager viewPager;
+    @BindView(R.id.viewpager)
+    ViewPager viewPager;
     /**
      * Позиция TabLayout.Tab.
      * Выделяется в зависимости от дня недели.
@@ -76,22 +84,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate()");
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabFragmentAdapter = new TabFragmentAdapter(getSupportFragmentManager(), createArrayLesson());
         viewPager.setAdapter(tabFragmentAdapter);
         updateFragmentAdapter();
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.addDrawerListener(new MyDrawerListener());
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
         settingFloatingActionButton(fab);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);

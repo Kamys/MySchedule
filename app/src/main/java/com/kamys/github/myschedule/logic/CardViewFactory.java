@@ -25,6 +25,14 @@ public class CardViewFactory {
      * Используется для контроля занимаемого места строкой..
      */
     private static final int lengthStringNormal = 28;
+    private static int[] imagesForLessonNumber = {
+            R.drawable.lesson_number_1,
+            R.drawable.lesson_number_2,
+            R.drawable.lesson_number_3,
+            R.drawable.lesson_number_4,
+            R.drawable.lesson_number_5,
+            R.drawable.lesson_number_6
+    };
     private LayoutInflater layoutInflater;
     private ViewGroup viewGroup;
     private Activity activity;
@@ -48,36 +56,19 @@ public class CardViewFactory {
         return s;
     }
 
-    public static int getImageLessonNumber(int lessonNumber) {
-        if (lessonNumber == 1) {
-            return R.drawable.lesson_number_1;
+    /**
+     * Get Resource is image for number is lesson.
+     *
+     * @param lessonNumber The number is lesson.
+     * @return Resource is image for number is lesson.
+     */
+    public static int getImageResourceForLessonNumber(int lessonNumber) {
+        lessonNumber--;  //For combination with array.
+        if (lessonNumber < 0 || lessonNumber >= imagesForLessonNumber.length) {
+            Log.e(TAG, "Failed getImageResourceForLessonNumber lessonNumber = " + lessonNumber);
+            return 0;
         }
-        if (lessonNumber == 2) {
-            return R.drawable.lesson_number_2;
-        }
-        if (lessonNumber == 3) {
-            return R.drawable.lesson_number_3;
-        }
-        if (lessonNumber == 4) {
-            return R.drawable.lesson_number_4;
-        }
-        if (lessonNumber == 5) {
-            return R.drawable.lesson_number_5;
-        }
-        if (lessonNumber == 6) {
-            return R.drawable.lesson_number_6;
-        }
-        if (lessonNumber == 7) {
-            return R.drawable.lesson_number_7;
-        }
-        if (lessonNumber == 8) {
-            return R.drawable.lesson_number_8;
-        }
-        if (lessonNumber == 9) {
-            return R.drawable.lesson_number_9;
-        }
-        Log.e(TAG, "Failed getImageLessonNumber lessonNumber = " + lessonNumber);
-        return R.drawable.error;
+        return imagesForLessonNumber[lessonNumber];
     }
 
     public CardView addNewCard(Lesson lesson) {
@@ -99,7 +90,7 @@ public class CardViewFactory {
         textViewNumerator.setText(formatNumerator(lesson.getNumeratorName()));
 
         ImageView imageViewNumber = (ImageView) card.findViewById(R.id.card_image_number);
-        imageViewNumber.setImageResource(getImageLessonNumber(lesson.getNumber()));
+        imageViewNumber.setImageResource(getImageResourceForLessonNumber(lesson.getNumber()));
 
         card.setOnClickListener(new CardViewListener(lesson));
 

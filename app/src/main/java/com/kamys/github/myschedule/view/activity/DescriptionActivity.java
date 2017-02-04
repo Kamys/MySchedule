@@ -17,12 +17,27 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Отображает подробное описание урока.
  */
 public class DescriptionActivity extends AppCompatActivity {
     public static final String KEY_LESSON = "KeyLesson";
     private static final String TAG = DescriptionActivity.class.getName();
+    @BindView(R.id.desc_name)
+    TextView lessonName;
+    @BindView(R.id.desc_time1)
+    TextView time1;
+    @BindView(R.id.desc_time2)
+    TextView time2;
+    @BindView(R.id.desc_description)
+    TextView lessonDescription;
+    @BindView(R.id.desc_image_number)
+    ImageView lessonNumber;
+    @BindView(R.id.desc_name_teachers)
+    TextView textViewNameTeachers;
     private Lesson lesson = null;
 
     @Override
@@ -30,28 +45,27 @@ public class DescriptionActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
+        ButterKnife.bind(this);
 
         lesson = (Lesson) getIntent().getSerializableExtra(KEY_LESSON);
 
         Log.d(TAG, "Lesson = " + lesson);
+        initDescription();
 
-        TextView lessonName = (TextView) findViewById(R.id.desc_name);
+        lessonNumber.setImageResource(CardViewFactory.getImageResourceForLessonNumber(lesson.getNumber()));
+    }
+
+    /**
+     * Getting data of lesson and set in view.
+     */
+    private void initDescription() {
         lessonName.setText(lesson.getName());
-
-        TextView time1 = (TextView) findViewById(R.id.desc_time1);
         time1.setText(lesson.getTime1());
-
-        TextView time2 = (TextView) findViewById(R.id.desc_time2);
         time2.setText(lesson.getTime2());
-
-        TextView lessonDescription = (TextView) findViewById(R.id.desc_description);
         lessonDescription.setText(lesson.getDescription());
-
-        initTeacherNames(lesson);
-
-
-        ImageView lessonNumber = (ImageView) findViewById(R.id.desc_image_number);
-        lessonNumber.setImageResource(CardViewFactory.getImageLessonNumber(lesson.getNumber()));
+        textViewNameTeachers.setText(lesson
+                .getTeacherNames()
+                .replace(",", ",\n"));
     }
 
     @Override
@@ -83,13 +97,6 @@ public class DescriptionActivity extends AppCompatActivity {
 
         MyCountDownTimer myCountDownTimer = new MyCountDownTimer(sec, 1000, calendar, beforeLessonTime);
         myCountDownTimer.start();
-    }
-
-    private void initTeacherNames(Lesson lesson) {
-        TextView textViewNameTeachers = (TextView) findViewById(R.id.desc_name_teachers);
-        String teacherNames = lesson.getTeacherNames();
-        teacherNames = teacherNames.replace(",", ",\n");
-        textViewNameTeachers.setText(teacherNames);
     }
 
     @Override
