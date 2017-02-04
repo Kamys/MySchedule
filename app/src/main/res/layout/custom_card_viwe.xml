@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_IdNumber0"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/card_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="5dp"
+            android:cropToPadding="false"
+            android:maxHeight="60dp"
+            android:maxWidth="70dp"
+            android:minHeight="70dp"
+            android:minWidth="80dp"
+            android:src="@drawable/geometry" />
+
+        <TextView
+            android:id="@+id/card_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/card_image"
+            android:layout_toLeftOf="@+id/card_numerator"
+            android:layout_toRightOf="@+id/card_image"
+            android:linksClickable="false"
+            android:longClickable="true"
+            android:maxLength="31"
+            android:maxLines="2"
+            android:minLines="2"
+            android:text="@string/for_test_big_string"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:id="@+id/card_time_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/card_name"
+            android:layout_below="@+id/card_name"
+
+            android:text="@string/for_test_time1" />
+
+        <TextView
+            android:id="@+id/card_time_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/card_time_1"
+            android:layout_below="@+id/card_time_1"
+            android:text="@string/for_test_time2" />
+
+        <TextView
+            android:id="@+id/card_numerator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="false"
+            android:layout_below="@+id/card_image_number"
+            android:minHeight="20dp"
+            android:minWidth="30dp"
+            android:paddingTop="3dp"
+            android:text="@string/numerator"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/card_image_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/card_name"
+            android:minHeight="25dp"
+            android:minWidth="25dp"
+            app:srcCompat="@drawable/lesson_number_0" />
+
+        <TextView
+            android:id="@+id/card_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="true"
+            android:layout_alignWithParentIfMissing="false"
+
+            android:layout_below="@+id/card_name"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/card_time_1"
+            android:longClickable="true"
+            android:text="@string/for_test_big_string"
+            android:typeface="serif" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
