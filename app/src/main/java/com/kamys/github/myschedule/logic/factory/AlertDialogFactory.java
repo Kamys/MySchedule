@@ -18,23 +18,23 @@ public class AlertDialogFactory {
      * Показать сообщение об ошибке.
      *
      * @param context Context который должен показать сообщение.
-     * @param e       Ошибка которую нужно показать.
+     * @param message       Ошибка которую нужно показать.
      */
-    public static void showAlertDialogError(Context context, Exception e) {
-        Log.w(TAG, "showAlertDialogError()", e);
-        createAlertDialogError(context, e).show();
+    public static void showAlertDialogError(Context context, String message) {
+        Log.w(TAG, "showAlertDialogError()" + message);
+        createAlertDialogError(context, message).show();
     }
 
     /**
      * Создание сообщение об ошибке.
      *
      * @param context Context который должен показать сообщение.
-     * @param e       Ошибка которую нужно показать.
+     * @param message       Ошибка которую нужно показать.
      */
-    public static AlertDialog createAlertDialogError(Context context, Exception e) {
+    public static AlertDialog createAlertDialogError(Context context, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.error)
-                .setMessage(e.getMessage())
+                .setMessage(message)
                 .setIcon(R.drawable.error)
                 .setCancelable(false)
                 .setNegativeButton(R.string.ok,

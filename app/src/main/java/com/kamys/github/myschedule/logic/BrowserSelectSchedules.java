@@ -30,8 +30,6 @@ import com.parsingHTML.logic.ParsingHTML;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.net.ConnectException;
-
 /**
  * Браузер с для выбора расписания.
  */
@@ -55,7 +53,7 @@ public class BrowserSelectSchedules {
             Log.w(TAG, "checkConnectInternet() Failed! ");
             String errorMessage = browserActivity.getString(R.string.failedConnect);
             AlertDialogFactory.showAlertDialogError(
-                    browserActivity, new ConnectException(errorMessage));
+                    browserActivity, errorMessage);
         } else {
             Log.i(TAG, "checkConnectInternet() Successfully! ");
         }
@@ -174,7 +172,7 @@ public class BrowserSelectSchedules {
             } catch (Exception e) {
                 Log.w(TAG, "onClick() ", e);
                 AlertDialogFactory.showAlertDialogError(
-                        browserActivity, e);
+                        browserActivity, e.getMessage());
             }
         }
     }

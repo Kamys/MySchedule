@@ -1,6 +1,6 @@
 package com.kamys.github.myschedule.logic;
 
-import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 import org.w3c.dom.Document;
@@ -25,21 +25,21 @@ import javax.xml.transform.stream.StreamResult;
  */
 public class SchedulesHelper {
     private static final String TAG = SchedulesHelper.class.getName();
-    private final Activity activity;
+    private final Context context;
 
 
-    public SchedulesHelper(Activity activity) {
-        this.activity = activity;
-        Log.i(TAG, "Create SchedulesHelper. Activity = " + activity);
+    public SchedulesHelper(Context context) {
+        this.context = context;
+        Log.i(TAG, "Create SchedulesHelper. Activity = " + context);
     }
 
     public Document initializationDocument() {
-        Log.i(TAG, "initializationDocument() activity = " + activity);
+        Log.i(TAG, "initializationDocument() context = " + context);
         Document document = renewDocument();
         if (document == null) {
             try {
                 Log.i(TAG, "initializationDocument parsingHTML!");
-                document = LessonHelper.parsingHTML(activity.getResources());
+                document = LessonHelper.parsingHTML(context.getResources());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -50,9 +50,9 @@ public class SchedulesHelper {
 
 
     public void saveDOC(Document document) {
-        Log.i(TAG, "saveDOC() activity = " + activity);
+        Log.i(TAG, "saveDOC() context = " + context);
         try {
-            File file = new File(activity.getFilesDir().getAbsolutePath(), "Schedules.xml");
+            File file = new File(context.getFilesDir().getAbsolutePath(), "Schedules.xml");
             Log.i(TAG, "File path = " + file.getAbsolutePath());
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             Result output = new StreamResult(file);
@@ -66,9 +66,9 @@ public class SchedulesHelper {
     }
 
     public Document renewDocument() {
-        Log.i(TAG, "renewDocument() activity = " + activity);
+        Log.i(TAG, "renewDocument() context = " + context);
         try {
-            File file = new File(activity.getFilesDir(), "Schedules.xml");
+            File file = new File(context.getFilesDir(), "Schedules.xml");
             if (!file.exists()) {
                 Log.i(TAG, "File not exists!");
                 return null;

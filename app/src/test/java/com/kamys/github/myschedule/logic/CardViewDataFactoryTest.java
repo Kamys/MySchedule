@@ -5,7 +5,7 @@ import com.kamys.github.myschedule.logic.factory.CardViewFactory;
 
 import org.junit.Test;
 
-public class CardViewFactoryTest {
+public class CardViewDataFactoryTest {
     // TODO: 05.02.2017 Add automate check.
     @Test
     public void getImageForLessonNumber() throws Exception {

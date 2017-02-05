@@ -110,23 +110,4 @@ public class LessonHelper {
                 return DayName.MONDAY;
         }
     }
-
-    /**
-     * Возвращает сегодняшний нумератор.
-     *
-     * @return сегодняшний нумератор.
-     */
-    public static NumeratorName calcNumeratorToDay() {
-        Calendar calendar = Calendar.getInstance();
-        Log.i(TAG, "calendar = " + calendar);
-        int weekOfMonth = calendar.get(Calendar.WEEK_OF_YEAR);
-        if (weekOfMonth % 2 == 0) {
-            Log.i(TAG, "calcNumeratorToDay return NUMERATOR");
-            return NumeratorName.NUMERATOR;
-        } else {
-            Log.i(TAG, "calcNumeratorToDay return DENOMINATOR");
-            return NumeratorName.DENOMINATOR;
-        }
-    }
-
 }

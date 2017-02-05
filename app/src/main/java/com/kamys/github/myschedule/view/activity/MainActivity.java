@@ -1,6 +1,7 @@
 package com.kamys.github.myschedule.view.activity;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,19 +19,15 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.kamys.github.myschedule.R;
-import com.kamys.github.myschedule.logic.LessonHelper;
-import com.kamys.github.myschedule.logic.SchedulesHelper;
 import com.kamys.github.myschedule.logic.adapters.TabFragmentAdapter;
+import com.kamys.github.myschedule.logic.factory.AlertDialogFactory;
+import com.kamys.github.myschedule.presenter.LessonsPresenter;
 import com.kamys.github.myschedule.presenter.TabManager;
-import com.kamys.github.myschedule.view.fragment.DayFragment;
-import com.parsingHTML.logic.element.DayName;
+import com.kamys.github.myschedule.view.ViewData;
 import com.parsingHTML.logic.element.NumeratorName;
 import com.parsingHTML.logic.extractor.xml.Lesson;
 
-import org.w3c.dom.Document;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +35,7 @@ import butterknife.ButterKnife;
 /**
  * Главное MainActivity.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ViewData<ArrayList<ArrayList<Lesson>>> {
 
     private static final String TAG = MainActivity.class.getName();
 
@@ -69,12 +66,11 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.viewpager)
     ViewPager viewPager;
 
-    private SchedulesHelper helper = new SchedulesHelper(this);
 
-    // TODO: 22.10.2016 Add description.
-    private NumeratorName numeratorToday = LessonHelper.calcNumeratorToDay();
     private TabFragmentAdapter tabFragmentAdapter;
     private TabManager tabManager;
+    private LessonsPresenter presenter;
+    private ArrayList<ArrayList<Lesson>> data;
 
 
     @Override
@@ -84,23 +80,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        tabFragmentAdapter = new TabFragmentAdapter(getSupportFragmentManager(), createArrayLesson());
-        viewPager.setAdapter(tabFragmentAdapter);
-        updateFragmentAdapter();
+        settingFloatingActionButton(fab);
+        setSupportActionBar(toolbar);
+        setTitle(R.string.schedule);
 
-        tabLayout.setupWithViewPager(viewPager);
-        tabManager = new TabManager(tabLayout);
+
+        presenter = new LessonsPresenter(this);
+        presenter.start();
 
         drawerLayout.addDrawerListener(new MyDrawerListener());
 
-        settingFloatingActionButton(fab);
-
-        setSupportActionBar(toolbar);
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new MenuItemListener(navigationView, drawerLayout));
 
-        setTitle(R.string.schedule);
     }
 
     /**
@@ -122,23 +115,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateFragmentAdapter() {
-        tabFragmentAdapter.updateLesson(createArrayLesson());
-    }
-
-    @NonNull
-    private ArrayList<ArrayList<Lesson>> createArrayLesson() {
-        Document doc = helper.initializationDocument();
-        int length = DayName.values().length;
-        ArrayList<ArrayList<Lesson>> arrayLists = new ArrayList<>(length);
-        for (int i = 0; i < length; i++) {
-            ArrayList<Lesson> lessons = LessonHelper.getLesson(DayName.values()[i], numeratorToday, doc);
-            arrayLists.add(lessons);
+        if (data != null) {
+            tabFragmentAdapter.updateLesson(data);
+            Log.i(TAG, "updateFragmentAdapter: update");
+        } else {
+            Log.w(TAG, "updateFragmentAdapter: Failed! data = null");
         }
-        helper.saveDOC(doc);
-        return arrayLists;
     }
 
-    private List<DayFragment> createDayFragments(Document doc) {
+
+/*    private List<DayFragment> createDayFragments(Document doc) {
         List<DayFragment> dayFragments = new ArrayList<>();
         for (DayName dayName : DayName.values()) {
             dayFragments.add(createDayFragment(dayName, doc));
@@ -151,20 +137,68 @@ public class MainActivity extends AppCompatActivity {
         DayFragment fragment = new DayFragment();
         Bundle bundle = new Bundle();
 
-        ArrayList<Lesson> lesson = LessonHelper.getLesson(dayName, numeratorToday, document);
+        ArrayList<Lesson> lesson = LessonHelper.getLesson(dayName, presenter.getNumeratorToday(), document);
 
         bundle.putSerializable(DayFragment.KEY_LESSON_LIST, lesson);
         bundle.putInt(DayFragment.KEY_DAY_NAME, dayName.ordinal());
         fragment.setArguments(bundle);
         return fragment;
+    }*/
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_main_num:
+                Log.i(TAG, "Menu main select \"num\".");
+                presenter.setNumeratorToday(NumeratorName.NUMERATOR);
+                break;
+            case R.id.menu_main_den:
+                Log.i(TAG, "Menu main select \"den\".");
+                presenter.setNumeratorToday(NumeratorName.DENOMINATOR);
+                break;
+            case R.id.menu_main_all:
+                presenter.setNumeratorToday(NumeratorName.EMPTY);
+                Log.i(TAG, "Menu main select \"all\".");
+                break;
+            default:
+                Log.w(TAG, "Failed onOptionsItemSelected item = " + item);
+                return false;
+        }
+        item.setChecked(true);
+        updateLesson();
+        return true;
     }
 
+    @Override
+    public void showData(ArrayList<ArrayList<Lesson>> data) {
+        this.data = data;
+        Log.i(TAG, "showData: data - " + this.data);
+
+        tabFragmentAdapter = new TabFragmentAdapter(getSupportFragmentManager(), data);
+        viewPager.setAdapter(tabFragmentAdapter);
+
+        tabLayout.setupWithViewPager(viewPager);
+        tabManager = new TabManager(tabLayout);
+    }
+
+    @Override
+    public void showError(String message) {
+        Log.i(TAG, "showError: message - " + message);
+        AlertDialogFactory.showAlertDialogError(getApplicationContext(), message);
+    }
+
+    @Override
+    public Context getContext() {
+        Log.i(TAG, "getContext()");
+        return getApplicationContext();
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
         tabManager.update();
-        selectNumeratorToday();
+        //selectNumeratorToday();
     }
 
     @Override
@@ -179,52 +213,6 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_main, menu);
         return true;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_main_num:
-                Log.i(TAG, "Menu main select \"num\".");
-                numeratorToday = NumeratorName.NUMERATOR;
-                break;
-            case R.id.menu_main_den:
-                Log.i(TAG, "Menu main select \"den\".");
-                numeratorToday = NumeratorName.DENOMINATOR;
-                break;
-            case R.id.menu_main_all:
-                numeratorToday = NumeratorName.EMPTY;
-                Log.i(TAG, "Menu main select \"all\".");
-                break;
-            default:
-                Log.w(TAG, "Failed onOptionsItemSelected item = " + item);
-                return false;
-        }
-        item.setChecked(true);
-        updateLesson();
-        return true;
-    }
-
-    private void selectNumeratorToday() {
-        numeratorToday = LessonHelper.calcNumeratorToDay();
-        Log.i(TAG, "selectNumeratorToday = " + numeratorToday);
-
-
-        // TODO: 23.10.2016 Implement select numerator when start app.
-        /*if(numeratorToday == NumeratorName.NUMERATOR){
-            onOptionsItemSelected(menu.findItem(R.id.menu_main_num));
-            return;
-        }
-        if(numeratorToday == NumeratorName.DENOMINATOR){
-            onOptionsItemSelected(menu.findItem(R.id.menu_main_den));
-            return;
-        }
-        if(numeratorToday == NumeratorName.EMPTY){
-            onOptionsItemSelected(menu.findItem(R.id.menu_main_all));
-            return;
-        }*/
-
-    }
-
 
 
     /**
