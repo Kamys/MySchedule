@@ -134,14 +134,19 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
 
     @Override
     public void showData(ArrayList<ArrayList<Lesson>> data) {
-        this.data = data;
-        Log.i(TAG, "showData: data - " + this.data);
+        if (this.data == null) {
+            this.data = data;
+            Log.i(TAG, "showData: data - " + this.data);
+            tabFragmentAdapter = new TabFragmentAdapter(getSupportFragmentManager(), data);
+            viewPager.setAdapter(tabFragmentAdapter);
 
-        tabFragmentAdapter = new TabFragmentAdapter(getSupportFragmentManager(), data);
-        viewPager.setAdapter(tabFragmentAdapter);
-
-        tabLayout.setupWithViewPager(viewPager);
-        tabManager = new TabManager(tabLayout);
+            tabLayout.setupWithViewPager(viewPager);
+            tabManager = new TabManager(tabLayout);
+        } else {
+            tabFragmentAdapter.updateLesson(data);
+            this.data = data;
+            Log.i(TAG, "showData: update data - " + this.data);
+        }
     }
 
     @Override
