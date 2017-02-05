@@ -25,8 +25,12 @@ public class TabManager {
     }
 
     public void update() {
-        Log.d(TAG, "update");
+        Log.d(TAG, "update()");
         selectTabToday();
+    }
+
+    public void resetpositionTabSelect() {
+        positionTabSelect = -1;
     }
 
     /**
@@ -34,7 +38,7 @@ public class TabManager {
      */
     private void selectTabToday() {
         int ordinal = LessonHelper.calcDayNameToDay().ordinal();
-        Log.i(TAG, "selectTabToday() ordinal = " + ordinal + " positionTabSelect = " + positionTabSelect);
+        Log.i(TAG, "selectTabToday: ordinal = " + ordinal + " positionTabSelect = " + positionTabSelect);
 
         if (positionTabSelect == -1) {
             Log.d(TAG, "positionTabSelect == -1.");

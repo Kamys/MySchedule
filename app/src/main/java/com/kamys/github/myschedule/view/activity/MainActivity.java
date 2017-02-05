@@ -146,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
             tabFragmentAdapter.updateLesson(data);
             this.data = data;
             Log.i(TAG, "showData: update data - " + this.data);
+            tabManager.resetpositionTabSelect();
+            tabManager.update();
         }
     }
 

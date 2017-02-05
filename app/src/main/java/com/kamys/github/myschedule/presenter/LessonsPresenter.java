@@ -52,5 +52,6 @@ public class LessonsPresenter {
     public void itemSelected(NumeratorName numerator) {
         numeratorToday = numerator;
         update();
+
     }
 }
