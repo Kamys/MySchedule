@@ -45,15 +45,12 @@ public class LessonsPresenter {
         }
     }
 
-    public NumeratorName getNumeratorToday() {
-        return numeratorToday;
-    }
-
-    public void setNumeratorToday(NumeratorName numeratorToday) {
-        this.numeratorToday = numeratorToday;
-    }
-
-    public void start() {
+    public void update() {
         view.showData(lessonFactory.createArrayLesson(numeratorToday));
+    }
+
+    public void itemSelected(NumeratorName numerator) {
+        numeratorToday = numerator;
+        update();
     }
 }

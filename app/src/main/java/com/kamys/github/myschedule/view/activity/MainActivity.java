@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
 
 
         presenter = new LessonsPresenter(this);
-        presenter.start();
+        presenter.update();
 
         drawerLayout.addDrawerListener(new MyDrawerListener());
 
@@ -108,65 +108,27 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
         });
     }
 
-    private void updateLesson() {
-        updateFragmentAdapter();
-        tabManager.update();
-
-    }
-
-    private void updateFragmentAdapter() {
-        if (data != null) {
-            tabFragmentAdapter.updateLesson(data);
-            Log.i(TAG, "updateFragmentAdapter: update");
-        } else {
-            Log.w(TAG, "updateFragmentAdapter: Failed! data = null");
-        }
-    }
-
-
-/*    private List<DayFragment> createDayFragments(Document doc) {
-        List<DayFragment> dayFragments = new ArrayList<>();
-        for (DayName dayName : DayName.values()) {
-            dayFragments.add(createDayFragment(dayName, doc));
-        }
-        Log.d(TAG, "createDayFragments return " + dayFragments);
-        return dayFragments;
-    }
-
-    private DayFragment createDayFragment(DayName dayName, Document document) {
-        DayFragment fragment = new DayFragment();
-        Bundle bundle = new Bundle();
-
-        ArrayList<Lesson> lesson = LessonHelper.getLesson(dayName, presenter.getNumeratorToday(), document);
-
-        bundle.putSerializable(DayFragment.KEY_LESSON_LIST, lesson);
-        bundle.putInt(DayFragment.KEY_DAY_NAME, dayName.ordinal());
-        fragment.setArguments(bundle);
-        return fragment;
-    }*/
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        NumeratorName numerator;
+
         switch (item.getItemId()) {
             case R.id.menu_main_num:
-                Log.i(TAG, "Menu main select \"num\".");
-                presenter.setNumeratorToday(NumeratorName.NUMERATOR);
+                numerator = NumeratorName.NUMERATOR;
                 break;
             case R.id.menu_main_den:
-                Log.i(TAG, "Menu main select \"den\".");
-                presenter.setNumeratorToday(NumeratorName.DENOMINATOR);
+                numerator = NumeratorName.DENOMINATOR;
                 break;
             case R.id.menu_main_all:
-                presenter.setNumeratorToday(NumeratorName.EMPTY);
-                Log.i(TAG, "Menu main select \"all\".");
+                numerator = NumeratorName.EMPTY;
                 break;
             default:
                 Log.w(TAG, "Failed onOptionsItemSelected item = " + item);
                 return false;
         }
+        Log.i(TAG, "onOptionsItemSelected: select " + numerator);
+        presenter.itemSelected(numerator);
         item.setChecked(true);
-        updateLesson();
         return true;
     }
 
