@@ -21,6 +21,7 @@ import com.kamys.github.myschedule.R;
 import com.kamys.github.myschedule.logic.LessonHelper;
 import com.kamys.github.myschedule.logic.SchedulesHelper;
 import com.kamys.github.myschedule.logic.adapters.TabFragmentAdapter;
+import com.kamys.github.myschedule.presenter.TabManager;
 import com.kamys.github.myschedule.view.fragment.DayFragment;
 import com.parsingHTML.logic.element.DayName;
 import com.parsingHTML.logic.element.NumeratorName;
@@ -62,21 +63,18 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tabs)
     TabLayout tabLayout;
     /**
-     * ViewPager который находится на  MainActivity.
+     * ViewPager который находится на MainActivity.
      * для отображения DayFragment.
      */
     @BindView(R.id.viewpager)
     ViewPager viewPager;
-    /**
-     * Позиция TabLayout.Tab.
-     * Выделяется в зависимости от дня недели.
-     */
-    private int positionTabSelect = -1;
+
     private SchedulesHelper helper = new SchedulesHelper(this);
 
     // TODO: 22.10.2016 Add description.
     private NumeratorName numeratorToday = LessonHelper.calcNumeratorToDay();
     private TabFragmentAdapter tabFragmentAdapter;
+    private TabManager tabManager;
 
 
     @Override
@@ -91,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         updateFragmentAdapter();
 
         tabLayout.setupWithViewPager(viewPager);
+        tabManager = new TabManager(tabLayout);
 
         drawerLayout.addDrawerListener(new MyDrawerListener());
 
@@ -118,8 +117,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateLesson() {
         updateFragmentAdapter();
-        positionTabSelect = -1;
-        selectTabToday();
+        tabManager.update();
+
     }
 
     private void updateFragmentAdapter() {
@@ -164,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        selectTabToday();
+        tabManager.update();
         selectNumeratorToday();
     }
 
@@ -226,59 +225,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Выделить Tab с сегодняшним днём.
-     */
-    private void selectTabToday() {
-        int ordinal = LessonHelper.calcDayNameToDay().ordinal();
-        Log.i(TAG, "selectTabToday() ordinal = " + ordinal + " positionTabSelect = " + positionTabSelect);
-
-        if (positionTabSelect == -1) {
-            Log.d(TAG, "positionTabSelect == -1.");
-            selectTab(ordinal);
-            return;
-        }
-
-        if (positionTabSelect == ordinal) {
-            Log.d(TAG, "Tab saved position.");
-        } else {
-            Log.d(TAG, "Tab new position.");
-            resetSelectTab(positionTabSelect);
-            selectTab(ordinal);
-        }
-    }
-
-    /**
-     * Выбрать Tab.
-     *
-     * @param position позиция Tab.
-     */
-    private void selectTab(int position) {
-        TabLayout.Tab tab = tabLayout.getTabAt(position);
-        if (tab != null) {
-            tab.setIcon(R.drawable.star);
-            viewPager.setCurrentItem(position);
-            Log.d(TAG, "Select tab = " + tab.getText());
-            positionTabSelect = position;
-        } else {
-            Log.w(TAG, "Select tab == null!");
-        }
-    }
-
-    /**
-     * Убрать выбор с Tab.
-     *
-     * @param position позиция Tab.
-     */
-    private void resetSelectTab(int position) {
-        TabLayout.Tab tabAt = tabLayout.getTabAt(position);
-        if (tabAt != null) {
-            tabAt.setIcon(null);
-            Log.d(TAG, "resetSelectTab() to " + tabAt.getText());
-        } else {
-            Log.w(TAG, "Failed resetSelectTab() tabAt == null. positionTabSelect = " + this.positionTabSelect);
-        }
-    }
 
 
     /**
