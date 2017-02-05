@@ -23,6 +23,7 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.kamys.github.myschedule.R;
+import com.kamys.github.myschedule.logic.factory.AlertDialogFactory;
 import com.kamys.github.myschedule.view.activity.BrowserActivity;
 import com.parsingHTML.logic.ParsingHTML;
 
@@ -53,7 +54,7 @@ public class BrowserSelectSchedules {
         if (!isOnline()) {
             Log.w(TAG, "checkConnectInternet() Failed! ");
             String errorMessage = browserActivity.getString(R.string.failedConnect);
-            AlertDialogManager.showAlertDialogError(
+            AlertDialogFactory.showAlertDialogError(
                     browserActivity, new ConnectException(errorMessage));
         } else {
             Log.i(TAG, "checkConnectInternet() Successfully! ");
@@ -172,7 +173,7 @@ public class BrowserSelectSchedules {
                 toast.show();
             } catch (Exception e) {
                 Log.w(TAG, "onClick() ", e);
-                AlertDialogManager.showAlertDialogError(
+                AlertDialogFactory.showAlertDialogError(
                         browserActivity, e);
             }
         }

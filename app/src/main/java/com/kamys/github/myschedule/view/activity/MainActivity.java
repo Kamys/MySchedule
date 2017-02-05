@@ -20,7 +20,7 @@ import android.view.View;
 import com.kamys.github.myschedule.R;
 import com.kamys.github.myschedule.logic.LessonHelper;
 import com.kamys.github.myschedule.logic.SchedulesHelper;
-import com.kamys.github.myschedule.logic.TabFragmentAdapter;
+import com.kamys.github.myschedule.logic.adapters.TabFragmentAdapter;
 import com.kamys.github.myschedule.view.fragment.DayFragment;
 import com.parsingHTML.logic.element.DayName;
 import com.parsingHTML.logic.element.NumeratorName;

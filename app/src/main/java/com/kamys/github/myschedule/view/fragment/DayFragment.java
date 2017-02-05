@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.kamys.github.myschedule.R;
-import com.kamys.github.myschedule.logic.CardViewFactory;
+import com.kamys.github.myschedule.logic.factory.CardViewFactory;
 import com.parsingHTML.logic.element.DayName;
 import com.parsingHTML.logic.extractor.xml.Lesson;
 

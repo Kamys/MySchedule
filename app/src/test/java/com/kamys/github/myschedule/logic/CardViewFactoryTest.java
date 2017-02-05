@@ -1,6 +1,8 @@
 package com.kamys.github.myschedule.logic;
 
 
+import com.kamys.github.myschedule.logic.factory.CardViewFactory;
+
 import org.junit.Test;
 
 public class CardViewFactoryTest {

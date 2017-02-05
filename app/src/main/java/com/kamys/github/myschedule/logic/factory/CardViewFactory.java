@@ -1,4 +1,4 @@
-package com.kamys.github.myschedule.logic;
+package com.kamys.github.myschedule.logic.factory;
 
 import android.app.Activity;
 import android.content.Intent;

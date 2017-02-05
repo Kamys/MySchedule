@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kamys.github.myschedule.R;
-import com.kamys.github.myschedule.logic.CardViewFactory;
+import com.kamys.github.myschedule.logic.factory.CardViewFactory;
 import com.parsingHTML.logic.extractor.xml.Lesson;
 
 import java.text.ParseException;

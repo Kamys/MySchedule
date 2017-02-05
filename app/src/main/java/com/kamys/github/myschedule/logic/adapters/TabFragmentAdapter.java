@@ -1,4 +1,4 @@
-package com.kamys.github.myschedule.logic;
+package com.kamys.github.myschedule.logic.adapters;
 
 
 import android.os.Bundle;

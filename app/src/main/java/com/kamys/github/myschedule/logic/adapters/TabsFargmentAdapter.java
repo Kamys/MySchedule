@@ -1,4 +1,4 @@
-package com.kamys.github.myschedule.logic;
+package com.kamys.github.myschedule.logic.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
