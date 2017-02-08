@@ -11,18 +11,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
- * Need for management {@link Lesson}.
+ * Need for presenter view {@link com.kamys.github.myschedule.view.activity.MainActivity}.
  */
 
-public class LessonsPresenter {
+public class MainActivityPresenter implements Presenter {
 
-    private static final String TAG = LessonsPresenter.class.getName();
+    private static final String TAG = MainActivityPresenter.class.getName();
+    private final ViewData<ArrayList<ArrayList<Lesson>>> view;
     private NumeratorName numeratorToday = calcNumeratorToDay();
-
-    private ViewData<ArrayList<ArrayList<Lesson>>> view;
     private LessonFactory lessonFactory;
 
-    public LessonsPresenter(ViewData<ArrayList<ArrayList<Lesson>>> view) {
+    public MainActivityPresenter(ViewData<ArrayList<ArrayList<Lesson>>> view) {
         this.view = view;
         lessonFactory = new LessonFactory(view.getContext());
     }
@@ -45,13 +44,23 @@ public class LessonsPresenter {
         }
     }
 
+    @Override
     public void update() {
         view.showData(lessonFactory.createArrayLesson(numeratorToday));
+    }
+
+    @Override
+    public void stop() {
+
     }
 
     public void itemSelected(NumeratorName numerator) {
         numeratorToday = numerator;
         update();
+
+    }
+
+    public void onClickFloatingActionButton() {
 
     }
 }

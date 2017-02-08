@@ -21,7 +21,7 @@ import android.view.View;
 import com.kamys.github.myschedule.R;
 import com.kamys.github.myschedule.logic.adapters.TabFragmentAdapter;
 import com.kamys.github.myschedule.logic.factory.AlertDialogFactory;
-import com.kamys.github.myschedule.presenter.LessonsPresenter;
+import com.kamys.github.myschedule.presenter.MainActivityPresenter;
 import com.kamys.github.myschedule.presenter.TabManager;
 import com.kamys.github.myschedule.view.ViewData;
 import com.parsingHTML.logic.element.NumeratorName;
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
 
     private TabFragmentAdapter tabFragmentAdapter;
     private TabManager tabManager;
-    private LessonsPresenter presenter;
+    private MainActivityPresenter presenter;
     private ArrayList<ArrayList<Lesson>> data;
 
 
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
         setTitle(R.string.schedule);
 
 
-        presenter = new LessonsPresenter(this);
+        presenter = new MainActivityPresenter(this);
         presenter.update();
 
         drawerLayout.addDrawerListener(new MyDrawerListener());
@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick FloatingActionButton.");
+                presenter.onClickFloatingActionButton();
             }
         });
     }

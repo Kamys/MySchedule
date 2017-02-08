@@ -1,5 +1,6 @@
 package com.kamys.github.myschedule.view.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +10,10 @@ import android.widget.TextView;
 
 import com.kamys.github.myschedule.R;
 import com.kamys.github.myschedule.logic.factory.CardViewFactory;
+import com.kamys.github.myschedule.presenter.DescriptionPresenter;
+import com.kamys.github.myschedule.view.ViewData;
 import com.parsingHTML.logic.extractor.xml.Lesson;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,7 +25,7 @@ import butterknife.ButterKnife;
 /**
  * Отображает подробное описание урока.
  */
-public class DescriptionActivity extends AppCompatActivity {
+public class DescriptionActivity extends AppCompatActivity implements ViewData<Lesson> {
     public static final String KEY_LESSON = "KeyLesson";
     private static final String TAG = DescriptionActivity.class.getName();
     @BindView(R.id.desc_name)
@@ -38,7 +40,11 @@ public class DescriptionActivity extends AppCompatActivity {
     ImageView lessonNumber;
     @BindView(R.id.desc_name_teachers)
     TextView textViewNameTeachers;
+    @BindView(R.id.desc_before_lesson_time)
+    TextView beforeLessonTime;
+
     private Lesson lesson = null;
+    private DescriptionPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +54,13 @@ public class DescriptionActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         lesson = (Lesson) getIntent().getSerializableExtra(KEY_LESSON);
-
-        Log.d(TAG, "Lesson = " + lesson);
-        initDescription();
-
-        lessonNumber.setImageResource(CardViewFactory.getImageResourceForLessonNumber(lesson.getNumber()));
+        presenter = new DescriptionPresenter(this, lesson);
     }
 
     /**
      * Getting data of lesson and set in view.
      */
-    private void initDescription() {
+    private void initDescription(Lesson lesson) {
         lessonName.setText(lesson.getName());
         time1.setText(lesson.getTime1());
         time2.setText(lesson.getTime2());
@@ -66,36 +68,43 @@ public class DescriptionActivity extends AppCompatActivity {
         textViewNameTeachers.setText(lesson
                 .getTeacherNames()
                 .replace(",", ",\n"));
+
+        lessonNumber.setImageResource(CardViewFactory.getImageResourceForLessonNumber(lesson.getNumber()));
     }
 
     @Override
     protected void onStart() {
-        final TextView beforeLessonTime = (TextView) findViewById(R.id.desc_before_lesson_time);
-        String time1 = lesson.getTime1();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        try {
-            Date date = sdf.parse(time1);
-            startTimer(beforeLessonTime, "Test:", date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Log.i(TAG, "onStart()");
+        presenter.update();
+        Log.i(TAG, "onStart: update");
+        startTimer(beforeLessonTime, "Test:", presenter.getStartTime());
+        Log.i(TAG, "onStart: startTimer");
+
         super.onStart();
     }
 
+    // TODO: 07.02.2017 Out logic in presenter.
     private void startTimer(final TextView beforeLessonTime, String txt, Date date) {
+        Log.i(TAG, "startTimer: data - " + date);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
-        Calendar calendarThis = Calendar.getInstance();
-        calendarThis.setTime(new Date());
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        Log.v(TAG, "startTimer: HOUR_OF_DAY - " + hourOfDay);
+        int minute = calendar.get(Calendar.MINUTE);
+        Log.v(TAG, "startTimer: MINUTE - " + minute);
+        int second = calendar.get(Calendar.SECOND);
+        Log.v(TAG, "startTimer: SECOND - " + second);
+        int allSec = hourOfDay * 3600000 + minute * 60000 + second;
+        Log.v(TAG, "startTimer: sec - " + allSec);
 
-        calendar.add(Calendar.HOUR_OF_DAY, calendarThis.get(Calendar.HOUR_OF_DAY) * -1);
-        calendar.add(Calendar.MINUTE, calendarThis.get(Calendar.MINUTE) * -1);
-        calendar.add(Calendar.SECOND, calendarThis.get(Calendar.SECOND) * -1);
+        int year = calendar.get(Calendar.YEAR);
+        if (year != 1970) {
+            Log.i(TAG, "startTimer: Pairs end.");
+            allSec = 0;
+        }
 
-        int sec = calendar.get(Calendar.HOUR_OF_DAY) * 3600000 + calendar.get(Calendar.MINUTE) * 60000;
-
-        MyCountDownTimer myCountDownTimer = new MyCountDownTimer(sec, 1000, calendar, beforeLessonTime);
+        MyCountDownTimer myCountDownTimer = new MyCountDownTimer(allSec, 1000, calendar, beforeLessonTime);
         myCountDownTimer.start();
     }
 
@@ -103,6 +112,21 @@ public class DescriptionActivity extends AppCompatActivity {
     protected void onDestroy() {
         Log.d(TAG, "onDestroy()");
         super.onDestroy();
+    }
+
+    @Override
+    public void showData(Lesson lesson) {
+        initDescription(lesson);
+    }
+
+    @Override
+    public void showError(String s) {
+
+    }
+
+    @Override
+    public Context getContext() {
+        return null;
     }
 
     private class MyCountDownTimer extends CountDownTimer {
@@ -126,7 +150,7 @@ public class DescriptionActivity extends AppCompatActivity {
 
         @Override
         public void onFinish() {
-            timerText.setText("-----");
+            timerText.setText("Пара началась!!");
         }
     }
 }
