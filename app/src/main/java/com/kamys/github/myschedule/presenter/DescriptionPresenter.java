@@ -24,7 +24,7 @@ public class DescriptionPresenter implements Presenter {
 
     @Override
     public void update() {
-
+        view.showData(lesson);
     }
 
     @Override

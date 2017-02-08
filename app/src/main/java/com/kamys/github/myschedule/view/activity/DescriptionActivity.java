@@ -43,7 +43,6 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
     @BindView(R.id.desc_before_lesson_time)
     TextView beforeLessonTime;
 
-    private Lesson lesson = null;
     private DescriptionPresenter presenter;
 
     @Override
@@ -53,7 +52,7 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
         setContentView(R.layout.activity_description);
         ButterKnife.bind(this);
 
-        lesson = (Lesson) getIntent().getSerializableExtra(KEY_LESSON);
+        Lesson lesson = (Lesson) getIntent().getSerializableExtra(KEY_LESSON);
         presenter = new DescriptionPresenter(this, lesson);
     }
 
@@ -61,6 +60,7 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
      * Getting data of lesson and set in view.
      */
     private void initDescription(Lesson lesson) {
+        Log.i(TAG, "initDescription: lesson - " + lesson);
         lessonName.setText(lesson.getName());
         time1.setText(lesson.getTime1());
         time2.setText(lesson.getTime2());
