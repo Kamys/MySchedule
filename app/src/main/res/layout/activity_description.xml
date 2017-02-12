@@ -141,15 +141,24 @@
         android:textStyle="normal|bold" />
 
     <TextView
-        android:id="@+id/desc_before_lesson_time"
+        android:id="@+id/desc_until_the_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_alignLeft="@+id/desc_value_name_time"
+        android:layout_alignStart="@+id/desc_value_name_time"
         android:layout_below="@+id/desc_value_name_time"
-        android:layout_marginLeft="5dp"
         android:fontFamily="sans-serif-condensed"
-        android:text="@string/before_the_pair" />
+        android:text="@string/example_time" />
+
+    <TextView
+        android:id="@+id/desc_until_the_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/desc_value_name_time"
+        android:layout_alignStart="@+id/desc_value_name_time"
+        android:layout_below="@+id/desc_until_the_start"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/example_time" />
 
 
 </RelativeLayout>

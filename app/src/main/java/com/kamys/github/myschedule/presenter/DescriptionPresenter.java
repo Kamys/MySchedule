@@ -32,13 +32,18 @@ public class DescriptionPresenter implements Presenter {
     }
 
     public long getMillisToStart() {
-        String time1 = lesson.getTime1();
-        return calculateToStart(time1);
+        String time = lesson.getTime1();
+        return calculateToStart(time);
     }
 
-    public long getEndTime() {
-        String time2 = lesson.getTime2();
-        return calculateToStart(time2);
+    public long getMillisToEnd() {
+        String time = lesson.getTime2();
+        return calculateToStart(extractDateIsSecond(time));
+    }
+
+    // TODO: 12.02.2017 delete this and add getTimeEnd pair in getMillisToEnd().
+    private String extractDateIsSecond(String time) {
+        return time.split("-")[1];
     }
 
     private long calculateToStart(String time) {

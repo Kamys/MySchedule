@@ -14,8 +14,6 @@ import com.kamys.github.myschedule.presenter.DescriptionPresenter;
 import com.kamys.github.myschedule.view.ViewData;
 import com.parsingHTML.logic.extractor.xml.Lesson;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -40,8 +38,10 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
     ImageView lessonNumber;
     @BindView(R.id.desc_name_teachers)
     TextView textViewNameTeachers;
-    @BindView(R.id.desc_before_lesson_time)
-    TextView beforeLessonTime;
+    @BindView(R.id.desc_until_the_start)
+    TextView untilTheStart;
+    @BindView(R.id.desc_until_the_end)
+    TextView untilTheEnd;
 
     private DescriptionPresenter presenter;
     private MyCountDownTimer myCountDownTimer;
@@ -78,16 +78,17 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
         Log.i(TAG, "onStart()");
         presenter.update();
         Log.i(TAG, "onStart: update");
-        startTimer(beforeLessonTime, "Test:", presenter.getMillisToStart());
+        // TODO: 12.02.2017 out string in res.
+        startTimer(untilTheStart, "Pairs start!!", presenter.getMillisToStart());
+        startTimer(untilTheEnd, "Pairs end!!", presenter.getMillisToEnd());
         Log.i(TAG, "onStart: startTimer");
 
         super.onStart();
     }
 
-    // TODO: 07.02.2017 Out logic in presenter.
-    private void startTimer(final TextView beforeLessonTime, String txt, long millisToStart) {
+    private void startTimer(final TextView textView, String messageForEnd, long millisToStart) {
 
-        myCountDownTimer = new MyCountDownTimer(millisToStart, beforeLessonTime);
+        myCountDownTimer = new MyCountDownTimer(millisToStart, textView, messageForEnd);
         myCountDownTimer.start();
     }
 
@@ -115,18 +116,16 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
 
     private class MyCountDownTimer extends CountDownTimer {
 
-        private static final long countDownInterval = 1000;
+        private static final long COUNT_DOWN_INTERVAL = 1000;
         private static final String FORMAT = "%02d:%02d:%02d";
-        private final Calendar calendar = Calendar.getInstance();
         private final TextView timerText;
+        private final String messageForEnd;
 
 
-        MyCountDownTimer(long millisInFuture, TextView timerText) {
-            super(millisInFuture, countDownInterval);
+        MyCountDownTimer(long millisInFuture, TextView timerText, String messageForEnd) {
+            super(millisInFuture, COUNT_DOWN_INTERVAL);
             Log.i(TAG, "MyCountDownTimer: millisInFuture - " + millisInFuture);
-            calendar.setTime(new Date(0));
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MILLISECOND, (int) millisInFuture);
+            this.messageForEnd = messageForEnd;
             this.timerText = timerText;
         }
 
@@ -143,7 +142,7 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
 
         @Override
         public void onFinish() {
-            timerText.setText("Пара началась!!");
+            timerText.setText(messageForEnd);
         }
     }
 }

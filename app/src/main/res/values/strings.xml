@@ -30,5 +30,5 @@
     <string name="time">Time:</string>
     <string name="description_for_image_number">This image number pairs</string>
     <string name="this_desc_image">This desc image.</string>
-    <string name="before_the_pair">Before the pair:</string>
+    <string name="example_time">00:00:00</string>
 </resources>
