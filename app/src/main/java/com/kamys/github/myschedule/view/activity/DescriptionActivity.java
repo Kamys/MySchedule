@@ -14,10 +14,10 @@ import com.kamys.github.myschedule.presenter.DescriptionPresenter;
 import com.kamys.github.myschedule.view.ViewData;
 import com.parsingHTML.logic.extractor.xml.Lesson;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +44,7 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
     TextView beforeLessonTime;
 
     private DescriptionPresenter presenter;
+    private MyCountDownTimer myCountDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,40 +78,23 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
         Log.i(TAG, "onStart()");
         presenter.update();
         Log.i(TAG, "onStart: update");
-        startTimer(beforeLessonTime, "Test:", presenter.getStartTime());
+        startTimer(beforeLessonTime, "Test:", presenter.getMillisToStart());
         Log.i(TAG, "onStart: startTimer");
 
         super.onStart();
     }
 
     // TODO: 07.02.2017 Out logic in presenter.
-    private void startTimer(final TextView beforeLessonTime, String txt, Date date) {
-        Log.i(TAG, "startTimer: data - " + date);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+    private void startTimer(final TextView beforeLessonTime, String txt, long millisToStart) {
 
-        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-        Log.v(TAG, "startTimer: HOUR_OF_DAY - " + hourOfDay);
-        int minute = calendar.get(Calendar.MINUTE);
-        Log.v(TAG, "startTimer: MINUTE - " + minute);
-        int second = calendar.get(Calendar.SECOND);
-        Log.v(TAG, "startTimer: SECOND - " + second);
-        int allSec = hourOfDay * 3600000 + minute * 60000 + second;
-        Log.v(TAG, "startTimer: sec - " + allSec);
-
-        int year = calendar.get(Calendar.YEAR);
-        if (year != 1970) {
-            Log.i(TAG, "startTimer: Pairs end.");
-            allSec = 0;
-        }
-
-        MyCountDownTimer myCountDownTimer = new MyCountDownTimer(allSec, 1000, calendar, beforeLessonTime);
+        myCountDownTimer = new MyCountDownTimer(millisToStart, beforeLessonTime);
         myCountDownTimer.start();
     }
 
     @Override
     protected void onDestroy() {
         Log.d(TAG, "onDestroy()");
+        myCountDownTimer.cancel();
         super.onDestroy();
     }
 
@@ -131,21 +115,30 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
 
     private class MyCountDownTimer extends CountDownTimer {
 
-        private final Calendar calendar;
+        private static final long countDownInterval = 1000;
+        private static final String FORMAT = "%02d:%02d:%02d";
+        private final Calendar calendar = Calendar.getInstance();
         private final TextView timerText;
-        private final SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
 
 
-        MyCountDownTimer(long millisInFuture, long countDownInterval, Calendar calendar, TextView timerText) {
+        MyCountDownTimer(long millisInFuture, TextView timerText) {
             super(millisInFuture, countDownInterval);
-            this.calendar = calendar;
+            Log.i(TAG, "MyCountDownTimer: millisInFuture - " + millisInFuture);
+            calendar.setTime(new Date(0));
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MILLISECOND, (int) millisInFuture);
             this.timerText = timerText;
         }
 
-        @Override
         public void onTick(long millisUntilFinished) {
-            calendar.add(Calendar.SECOND, -1);
-            timerText.setText(format.format(calendar.getTime()));
+
+            String timeToStart = String.format(Locale.getDefault(), FORMAT,
+                    TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
+                    TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
+                            TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+                    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
+                            TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+            timerText.setText(timeToStart);
         }
 
         @Override

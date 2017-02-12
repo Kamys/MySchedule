@@ -6,7 +6,6 @@ import com.kamys.github.myschedule.view.ViewData;
 import com.parsingHTML.logic.extractor.xml.Lesson;
 
 import java.text.ParseException;
-import java.util.Date;
 
 /**
  * Need for presenter view {@link com.kamys.github.myschedule.view.activity.DescriptionActivity}.
@@ -32,26 +31,26 @@ public class DescriptionPresenter implements Presenter {
 
     }
 
-    public Date getStartTime() {
+    public long getMillisToStart() {
         String time1 = lesson.getTime1();
         return calculateToStart(time1);
     }
 
-    public Date getEndTime() {
+    public long getEndTime() {
         String time2 = lesson.getTime2();
         return calculateToStart(time2);
     }
 
-    private Date calculateToStart(String time) {
+    private long calculateToStart(String time) {
         LessonTimeManager lessonTimeManager = new LessonTimeManager();
         try {
-            Date dataToStart = lessonTimeManager.calculateToStart(time);
-            Log.d(TAG, "getStartTime: dataToStart - " + dataToStart);
-            return dataToStart;
+            long millisToStart = lessonTimeManager.calculateHowToStart(time);
+            Log.d(TAG, "getMillisToStart: dataToStart - " + millisToStart);
+            return millisToStart;
         } catch (ParseException e) {
-            Log.w(TAG, "getStartTime: Failed time - " + time, e);
+            Log.w(TAG, "getMillisToStart: Failed time - " + time, e);
             view.showError(e.getMessage());
-            return new Date(0);
+            return 0;
         }
     }
 }
