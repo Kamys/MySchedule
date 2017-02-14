@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
         ButterKnife.bind(this);
 
         settingFloatingActionButton(fab);
+        fab.hide();
         setSupportActionBar(toolbar);
         setTitle(R.string.schedule);
 
