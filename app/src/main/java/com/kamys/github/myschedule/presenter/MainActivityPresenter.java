@@ -31,7 +31,7 @@ public class MainActivityPresenter implements Presenter {
      *
      * @return numerator today.
      */
-    private static NumeratorName calcNumeratorToDay() {
+    public static NumeratorName calcNumeratorToDay() {
         Calendar calendar = Calendar.getInstance();
         Log.i(TAG, "calendar = " + calendar);
         int weekOfMonth = calendar.get(Calendar.WEEK_OF_YEAR);

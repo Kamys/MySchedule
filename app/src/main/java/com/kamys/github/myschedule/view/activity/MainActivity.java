@@ -38,7 +38,11 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements ViewData<ArrayList<ArrayList<Lesson>>> {
 
     private static final String TAG = MainActivity.class.getName();
-
+    private static final int[] ID_MENU_ITEMS = {
+            R.id.menu_main_num,
+            R.id.menu_main_den,
+            R.id.menu_main_all,
+    };
     /**
      * DrawerLayout который находится на  MainActivity.
      */
@@ -65,13 +69,10 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
      */
     @BindView(R.id.viewpager)
     ViewPager viewPager;
-
-
     private TabFragmentAdapter tabFragmentAdapter;
     private TabManager tabManager;
     private MainActivityPresenter presenter;
     private ArrayList<ArrayList<Lesson>> data;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
                 numerator = NumeratorName.EMPTY;
                 break;
             default:
-                Log.w(TAG, "Failed onOptionsItemSelected item = " + item);
+                Log.w(TAG, "onOptionsItemSelected: Failed select item = " + item);
                 return false;
         }
         Log.i(TAG, "onOptionsItemSelected: select " + numerator);
@@ -182,9 +183,22 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-        return true;
+
+        selectTodayNumeratorInMenuItem(menu);
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
+    private void selectTodayNumeratorInMenuItem(Menu menu) {
+        NumeratorName numeratorToday = MainActivityPresenter.calcNumeratorToDay();
+
+        int ordinal = numeratorToday.ordinal();
+        int idMenuItem = ID_MENU_ITEMS[ordinal];
+        Log.i(TAG, "onPrepareOptionsMenu: numeratorToday = " + numeratorToday + " id menu item = " + idMenuItem);
+
+        MenuItem item = menu.findItem(idMenuItem);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    }
 
     /**
      * Слушатель для открытия и закрытия меню.
