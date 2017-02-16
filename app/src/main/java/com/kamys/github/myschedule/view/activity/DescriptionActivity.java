@@ -70,7 +70,8 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
                 .getTeacherNames()
                 .replace(",", ",\n"));
 
-        lessonNumber.setImageResource(CardViewFactory.getImageResourceForLessonNumber(lesson.getNumber()));
+        int resId = CardViewFactory.getImageResourceForLessonNumber(lesson.getNumber());
+        lessonNumber.setImageResource(resId);
     }
 
     @Override
@@ -119,7 +120,7 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
     private class MyCountDownTimer extends CountDownTimer {
 
         private static final long COUNT_DOWN_INTERVAL = 1000;
-        private static final String FORMAT = "%02d:%02d:%02d";
+        private static final String FORMAT_FOR_TIME = "%02d:%02d:%02d";
         private final TextView timerText;
         private final String messageForEnd;
 
@@ -133,7 +134,7 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
 
         public void onTick(long millisUntilFinished) {
 
-            String timeToStart = String.format(Locale.getDefault(), FORMAT,
+            String timeToStart = String.format(Locale.getDefault(), FORMAT_FOR_TIME,
                     TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
                     TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
                             TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
