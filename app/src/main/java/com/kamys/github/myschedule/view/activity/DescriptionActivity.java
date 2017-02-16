@@ -78,9 +78,11 @@ public class DescriptionActivity extends AppCompatActivity implements ViewData<L
         Log.i(TAG, "onStart()");
         presenter.update();
         Log.i(TAG, "onStart: update");
-        // TODO: 12.02.2017 out string in res.
-        startTimer(untilTheStart, "Pairs start!!", presenter.getMillisToStart());
-        startTimer(untilTheEnd, "Pairs end!!", presenter.getMillisToEnd());
+        final String pairStart = getResources().getString(R.string.pair_start);
+        final String pairEnd = getResources().getString(R.string.pair_end);
+
+        startTimer(untilTheStart, pairStart, presenter.getMillisToStart());
+        startTimer(untilTheEnd, pairEnd, presenter.getMillisToEnd());
         Log.i(TAG, "onStart: startTimer");
 
         super.onStart();

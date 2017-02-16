@@ -31,4 +31,7 @@
     <string name="description_for_image_number">This image number pairs</string>
     <string name="this_desc_image">This desc image.</string>
     <string name="example_time">00:00:00</string>
+
+    <string name="pair_start">Pairs start!!</string>
+    <string name="pair_end">Pairs end!!</string>
 </resources>
