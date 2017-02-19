@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements ViewData<List<Lis
     protected void onStart() {
         super.onStart();
         tabManager.update();
-        //selectNumeratorToday();
     }
 
     @Override
@@ -245,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements ViewData<List<Lis
                     intent = new Intent(MainActivity.this, BrowserActivity.class);
                     break;
                 case R.id.menu_nav_setting:
-                    //intent = new Intent(MainActivity.this, SettingActivity.class);
+
                     break;
             }
 

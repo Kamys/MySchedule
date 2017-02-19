@@ -1,18 +1,16 @@
 package com.kamys.github.myschedule.logic.adapters;
 
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
+import com.kamys.github.myschedule.logic.factory.DayFragmentFactory;
 import com.kamys.github.myschedule.view.fragment.DayFragment;
 import com.parsingHTML.logic.element.DayName;
 import com.parsingHTML.logic.extractor.xml.Lesson;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,14 +21,12 @@ public class TabFragmentAdapter extends FragmentPagerAdapter {
     /**
      * This list contains dayFragments for tab.
      */
-    private final List<DayFragment> dayFragments = new ArrayList<>();
+    private final List<DayFragment> dayFragments;
+    private final DayFragmentFactory factory = new DayFragmentFactory();
 
     public TabFragmentAdapter(FragmentManager manager) {
         super(manager);
-        for (int i = 0; i < DayName.values().length; i++) {
-            DayFragment day = createDay(i);
-            dayFragments.add(day);
-        }
+        dayFragments = factory.createAll();
         Log.i(TAG, "Create TabFragmentAdapter " + toString());
     }
 
@@ -38,18 +34,6 @@ public class TabFragmentAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         Log.d(TAG, "getItem position = " + position);
         return dayFragments.get(position);
-    }
-
-    // TODO: 19.02.2017 out create DayFragment in factory.
-    @NonNull
-    private DayFragment createDay(int position) {
-        Log.i(TAG, "createDay: position = " + position);
-        DayFragment newDay = new DayFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(DayFragment.KEY_DAY_NAME, position);
-        Log.d(TAG, "getItem bundle = " + bundle);
-        newDay.setArguments(bundle);
-        return newDay;
     }
 
     @Override

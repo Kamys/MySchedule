@@ -43,7 +43,6 @@ public class DayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView()");
-        // Inflate the layout for this fragment
 
         this.inflater = inflater;
         View myFragment = this.inflater.inflate(R.layout.fragment_list_cards, container, false);
