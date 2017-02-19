@@ -27,7 +27,7 @@ import com.kamys.github.myschedule.view.ViewData;
 import com.parsingHTML.logic.element.NumeratorName;
 import com.parsingHTML.logic.extractor.xml.Lesson;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 /**
  * Главное MainActivity.
  */
-public class MainActivity extends AppCompatActivity implements ViewData<ArrayList<ArrayList<Lesson>>> {
+public class MainActivity extends AppCompatActivity implements ViewData<List<List<Lesson>>> {
 
     private static final String TAG = MainActivity.class.getName();
     private static final int[] ID_MENU_ITEMS = {
@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
     private TabFragmentAdapter tabFragmentAdapter;
     private TabManager tabManager;
     private MainActivityPresenter presenter;
-    private ArrayList<ArrayList<Lesson>> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +84,12 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
         fab.hide();
         setSupportActionBar(toolbar);
         setTitle(R.string.schedule);
+
+        tabFragmentAdapter = new TabFragmentAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(tabFragmentAdapter);
+
+        tabLayout.setupWithViewPager(viewPager);
+        tabManager = new TabManager(tabLayout);
 
 
         presenter = new MainActivityPresenter(this);
@@ -136,22 +141,11 @@ public class MainActivity extends AppCompatActivity implements ViewData<ArrayLis
     }
 
     @Override
-    public void showData(ArrayList<ArrayList<Lesson>> data) {
-        if (this.data == null) {
-            this.data = data;
-            Log.i(TAG, "showData: data - " + this.data);
-            tabFragmentAdapter = new TabFragmentAdapter(getSupportFragmentManager(), data);
-            viewPager.setAdapter(tabFragmentAdapter);
-
-            tabLayout.setupWithViewPager(viewPager);
-            tabManager = new TabManager(tabLayout);
-        } else {
+    public void showData(List<List<Lesson>> data) {
             tabFragmentAdapter.updateLesson(data);
-            this.data = data;
-            Log.i(TAG, "showData: update data - " + this.data);
+        Log.i(TAG, "showData: update data - " + data);
             tabManager.resetpositionTabSelect();
             tabManager.update();
-        }
     }
 
     @Override

@@ -15,7 +15,7 @@ import com.kamys.github.myschedule.logic.factory.CardViewFactory;
 import com.parsingHTML.logic.element.DayName;
 import com.parsingHTML.logic.extractor.xml.Lesson;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -30,7 +30,7 @@ public class DayFragment extends Fragment {
      * День который отображает DayFragment.
      */
     private DayName dayName;
-    private ArrayList<Lesson> lessons;
+    private List<Lesson> lessons;
     private LinearLayout linearLayout;
     private LayoutInflater inflater;
 
@@ -58,7 +58,7 @@ public class DayFragment extends Fragment {
         }
 
         if (lessons == null) {
-            lessons = (ArrayList<Lesson>) arguments.getSerializable(KEY_LESSON_LIST);
+            lessons = (List<Lesson>) arguments.getSerializable(KEY_LESSON_LIST);
             Log.d(TAG, "Get lessons of arguments = " + lessons);
         }
 
@@ -80,7 +80,7 @@ public class DayFragment extends Fragment {
         return dayName;
     }
 
-    public void update(ArrayList<Lesson> lessons) {
+    public void update(List<Lesson> lessons) {
         this.lessons = lessons;
         if (linearLayout != null && inflater != null) {
             linearLayout.removeAllViews();
@@ -115,7 +115,7 @@ public class DayFragment extends Fragment {
         Log.i(TAG, "onSaveInstanceState()");
         if (dayName != null && lessons != null) {
             Bundle bundle = new Bundle();
-            bundle.putSerializable(DayFragment.KEY_LESSON_LIST, lessons);
+            bundle.putSerializable(DayFragment.KEY_LESSON_LIST, (Serializable) lessons);
             bundle.putInt(DayFragment.KEY_DAY_NAME, dayName.ordinal());
             outState.putAll(bundle);
         }
@@ -127,6 +127,7 @@ public class DayFragment extends Fragment {
     public String toString() {
         return "DayFragment{" +
                 "dayName=" + dayName +
+                ", lessons=" + lessons +
                 '}';
     }
 }

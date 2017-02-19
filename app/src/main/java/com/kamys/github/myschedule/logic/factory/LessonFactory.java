@@ -11,6 +11,7 @@ import com.parsingHTML.logic.extractor.xml.Lesson;
 import org.w3c.dom.Document;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This factory for {@link Lesson}
@@ -24,10 +25,10 @@ public class LessonFactory {
     }
 
 
-    public ArrayList<ArrayList<Lesson>> createArrayLesson(NumeratorName numeratorToday) {
+    public List<List<Lesson>> createArrayLesson(NumeratorName numeratorToday) {
         Document doc = helper.initializationDocument();
         int length = DayName.values().length;
-        ArrayList<ArrayList<Lesson>> arrayLists = new ArrayList<>(length);
+        List<List<Lesson>> arrayLists = new ArrayList<>(length);
         for (int i = 0; i < length; i++) {
             ArrayList<Lesson> lessons = LessonHelper.getLesson(DayName.values()[i], numeratorToday, doc);
             arrayLists.add(lessons);

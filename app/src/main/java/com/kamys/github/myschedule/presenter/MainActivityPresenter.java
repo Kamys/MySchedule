@@ -7,8 +7,8 @@ import com.kamys.github.myschedule.view.ViewData;
 import com.parsingHTML.logic.element.NumeratorName;
 import com.parsingHTML.logic.extractor.xml.Lesson;
 
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Need for presenter view {@link com.kamys.github.myschedule.view.activity.MainActivity}.
@@ -17,11 +17,11 @@ import java.util.Calendar;
 public class MainActivityPresenter implements Presenter {
 
     private static final String TAG = MainActivityPresenter.class.getName();
-    private final ViewData<ArrayList<ArrayList<Lesson>>> view;
+    private final ViewData<List<List<Lesson>>> view;
     private NumeratorName numeratorToday = calcNumeratorToDay();
     private LessonFactory lessonFactory;
 
-    public MainActivityPresenter(ViewData<ArrayList<ArrayList<Lesson>>> view) {
+    public MainActivityPresenter(ViewData<List<List<Lesson>>> view) {
         this.view = view;
         lessonFactory = new LessonFactory(view.getContext());
     }
